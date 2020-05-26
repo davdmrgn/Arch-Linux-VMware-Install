@@ -28,12 +28,19 @@ arch-chroot /mnt
 ln -sf /usr/share/zoneinfo/America/New_York /etc/localtime
 hwclock --systohc
 locale-gen
-pacman -Sy dosfstools grub efibootmgr
+pacman -S dosfstools grub efibootmgr open-vm-tools
 mkfs.fat -F32 /dev/sda1
+mkdir /boot/efi
 mount /dev/sda1 /boot/efi
-grub-install --target=x86_64-efi --efi-directory=esp --bootloader-id=GRUB
+grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
 passwd
+
+pacman -S plasma
+# accept all defaults
+pacman -S sddm
+systemctl enable sddm
+
 exit
 reboot
 ```
